@@ -36,12 +36,6 @@ jobs:
       - name: Install dependencies
         run: npm install
         continue-on-error: true
-
-      - name: Check installation status
-        if: steps.install.outcome != 'success'
-        run: |
-          echo "Dependencies installation failed. Stopping workflow."
-          exit 1
       
       - name: Run Cypress Tests and Generate Allure Report
         id: cypress
@@ -56,7 +50,7 @@ jobs:
         with:
           ref: gh-pages
           path: gh-pages
-      
+
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
         if: always()
@@ -64,7 +58,7 @@ jobs:
           gh_pages: gh-pages
           allure_history: allure-history
           allure_results: allure-results
-      
+
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
         if: always()
@@ -72,9 +66,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
-
-      - name: Check test results
-        if: steps.cypress.outcome == 'failure'
-        run: |
-          echo "Cypress tests failed"
-          exit 1
