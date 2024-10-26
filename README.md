@@ -33,7 +33,7 @@ To avoid exposing sensitive data like usernames and passwords, a cypress.env.jso
     "INVALID_USER": "invalid_user",
     "USER_LOCKED": "locked_out_user",
     "USER_PASSWORD": "secret_sauce",
-    "INVALID_PASSWORD": "invalid_sauce"
+    "INVALID_PASSWORD": "invalid_password"
 }
 ```
 

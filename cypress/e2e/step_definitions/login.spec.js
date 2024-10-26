@@ -19,7 +19,7 @@ When('I login with valid credentials', () => {
 When('I login with invalid credentials', () => {
     loginPage.login(
         Cypress.env('INVALID_USER'),
-        Cypress.env('INALID_PASSWORD')
+        Cypress.env('INVALID_PASSWORD')
     );
 });
 
