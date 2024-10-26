@@ -40,7 +40,7 @@ jobs:
       
       - name: Install dependencies
         id: install
-        run: npm i
+        run: npm install
         continue-on-error: true
 
       - name: Check installation status
@@ -51,12 +51,15 @@ jobs:
       
       - name: Run Cypress Tests
         id: cypress
-        uses: cypress-io/github-action@v5
-        with:
-          wait-on-timeout: 60
-          start: npm run cy:e2e
+        run: npm run cy:e2e
         continue-on-error: true
-     
+
+      - name: Generate Allure Report
+        run: |
+          npm run report:generate
+          # Move the report to the correct location
+          mv allure-report $GITHUB_WORKSPACE/allure-history
+      
       - name: Load test report history
         if: steps.cypress.outcome == 'success' || steps.cypress.outcome == 'failure'
         uses: actions/checkout@v4
@@ -65,15 +68,7 @@ jobs:
           ref: gh-pages
           path: gh-pages
       
-      - name: Build test report
-        if: steps.cypress.outcome == 'success' || steps.cypress.outcome == 'failure'
-        uses: simple-elf/allure-report-action@v1.7
-        with:
-          gh_pages: gh-pages
-          allure_history: allure-history
-          allure_results: allure-results
-      
-      - name: Publish test report
+      - name: Publish Allure Report
         if: steps.cypress.outcome == 'success' || steps.cypress.outcome == 'failure'
         uses: peaceiris/actions-gh-pages@v3
         with:
