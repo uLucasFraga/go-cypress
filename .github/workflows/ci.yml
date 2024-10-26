@@ -17,29 +17,23 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BASE_URL: ${{ secrets.BASE_URL }}
-      CYPRESS_USER_STANDARD: ${{ secrets.USER_STANDARD }}
-      CYPRESS_USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-      CYPRESS_INVALID_USER: ${{ secrets.INVALID_USER }}
-      CYPRESS_INVALID_PASSWORD: ${{ secrets.INVALID_PASSWORD }}
-      CYPRESS_USER_LOCKED: ${{ secrets.USER_LOCKED }}
-
+    
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v4
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
+      
       - name: Clean directories
         run: |
           rm -rf allure-results
           rm -rf allure-report
           npm run cy:clean
-
+      
       - name: Install dependencies
-        id: install
         run: npm install
         continue-on-error: true
 
@@ -48,38 +42,32 @@ jobs:
         run: |
           echo "Dependencies installation failed. Stopping workflow."
           exit 1
-
-      - name: Run Cypress Tests
+      
+      - name: Run Cypress Tests and Generate Allure Report
         id: cypress
-        run: npm run cy:e2e
+        run: |
+          npm run test:allure
         continue-on-error: true
-
+     
       - name: Load test report history
         uses: actions/checkout@v3
-        if: always()  
+        if: always()
         continue-on-error: true
         with:
           ref: gh-pages
           path: gh-pages
-
-      - name: Generate Allure report
-        run: |
-          npm run report:generate 
-          ls -la allure-report  
-          ls -la allure-results  
-        continue-on-error: true
-
+      
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
-        if: always() 
+        if: always()
         with:
           gh_pages: gh-pages
           allure_history: allure-history
           allure_results: allure-results
-
+      
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
-        if: always() 
+        if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
