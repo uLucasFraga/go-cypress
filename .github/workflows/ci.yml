@@ -3,25 +3,23 @@ name: Cypress Tests
 permissions:
   contents: write
   pages: write
-  id-token: write
 
 on:
   push:
-    branches: ['main', 'master']
+    branches:
+      - 'main'
   pull_request:
-    branches: ['main', 'master']
-  workflow_dispatch:
-
-env:
-  BASE_URL: ${{ secrets.BASE_URL }}
-  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+    branches:
+      - 'main'
+  schedule:
+    - cron: "0 12,20 * * 1-5"
 
 jobs:
-  e2e-tests:
+  regression-cypress:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-
+    env:
+      BASE_URL: ${{ secrets.BASE_URL }}
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,9 +31,11 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
+      
+      - name: Clean directories
+        run: |
+          npm run allure:clear
+          npm run cy:clean
 
       - name: Install dependencies
         run: npm ci
@@ -45,15 +45,29 @@ jobs:
 
       - name: Run Cypress tests
         run: npm run cy:e2e
-        env:
-          CYPRESS_BASE_URL: ${{ secrets.BASE_URL }}
         continue-on-error: true
+
+      - name: Load test report history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
 
       - name: Generate Allure Report
         if: always()
         run: |
           npm run allure:generate
           cp -r ./allure-report/history/* ./allure-results/history/ || true
+
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: allure-results
 
       - name: Store Test Results
         if: always()
@@ -67,9 +81,9 @@ jobs:
             cypress/videos/
           retention-days: 30
 
-      - name: Deploy to GitHub Pages
-        if: always()
+      - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
+        if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
