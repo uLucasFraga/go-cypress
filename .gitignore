@@ -1,0 +1,90 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Cypress Generated
+cypress/downloads/
+cypress/screenshots/
+cypress/videos/
+cypress.env.json
+
+# Allure Reports
+allure-report/
+allure-results/
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# IDE - IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# IDE - WebStorm
+.idea/
+.idea_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Operating System
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# Test coverage
+coverage/
+
+# Temporary files
+*.swp
+*.swo
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Debug files
+.debug/
+
+# Cucumber intermediate files
+*.feature.js
+
+# Optional: keep these if you want to version control them
+# cypress/fixtures/
+# cypress/support/
+# cypress/plugins/
+allure-results
+allure-report
+node_modules
+cypress.env.json
