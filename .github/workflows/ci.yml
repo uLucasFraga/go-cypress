@@ -18,10 +18,10 @@ jobs:
     env:
       BASE_URL: ${{ secrets.BASE_URL }}
       USER_STANDARD: ${{ secrets.USER_STANDARD }}
-      INVALID_USER: ${{ secrets.INVALID_USER }}
-      USER_LOCKED: ${{ secrets.USER_LOCKED }}
       USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+      INVALID_USER: ${{ secrets.INVALID_USER }}
       INVALID_PASSWORD: ${{ secrets.INVALID_PASSWORD }}
+      USER_LOCKED: ${{ secrets.USER_LOCKED }}
     
     steps:
       - name: Checkout
@@ -55,35 +55,40 @@ jobs:
         with:
           wait-on-timeout: 60
           start: npm run cy:e2e
+        env:
+          USER_STANDARD: ${{ secrets.USER_STANDARD }}
+          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+          INVALID_USER: ${{ secrets.INVALID_USER }}
+          INVALID_PASSWORD: ${{ secrets.INVALID_PASSWORD }}
+          USER_LOCKED: ${{ secrets.USER_LOCKED }}
         continue-on-error: true
-      
-      - name: Check test results
-        if: steps.cypress.outcome == 'failure'
-        run: |
-          echo "Cypress tests failed"
-          exit 1
-
-  page-deployment:
-    runs-on: ubuntu-latest
-    needs: regression-cypress
-    steps:
-      - name: Checkout Report History
+     
+      - name: Load test report history
+        if: steps.cypress.outcome == 'success' || steps.cypress.outcome == 'failure'
         uses: actions/checkout@v4
         continue-on-error: true
         with:
           ref: gh-pages
           path: gh-pages
       
-      - name: Build Test Report
+      - name: Build test report
+        if: steps.cypress.outcome == 'success' || steps.cypress.outcome == 'failure'
         uses: simple-elf/allure-report-action@v1.7
         with:
           gh_pages: gh-pages
           allure_history: allure-history
           allure_results: allure-results
       
-      - name: Publish Test Report
+      - name: Publish test report
+        if: steps.cypress.outcome == 'success' || steps.cypress.outcome == 'failure'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
+
+      - name: Check test results
+        if: steps.cypress.outcome == 'failure'
+        run: |
+          echo "Cypress tests failed"
+          exit 1
