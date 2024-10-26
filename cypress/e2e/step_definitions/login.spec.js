@@ -1,6 +1,5 @@
 /// <reference types="Cypress" />
 
-import inventoryPage from "../pages/inventoryPage";
 import loginPage, { login } from "../pages/loginPage";
 
 const standardUser = Cypress.env('USER_STANDARD') || 'standard_user_fallback';
@@ -12,8 +11,8 @@ Given('I am on the login page', () => {
 
 When('I login with valid credentials', () => {
     loginPage.login(
-        standardUser,
-        userPassword
+        Cypress.env('USER_STANDARD'),
+        Cypress.env('USER_PASSWORD')
     );
 });
 
@@ -27,7 +26,7 @@ When('I login with invalid credentials', () => {
 When('I login with locked user', () => {
     loginPage.login(
         Cypress.env('USER_LOCKED'),
-        userPassword
+        Cypress.env('USER_PASSWORD')
     );
 });
 
@@ -36,11 +35,11 @@ When('I login with empty fields', () => {
 });
 
 When('I login without username fields', () => {
-    loginPage.login('', userPassword);
+    loginPage.login('', Cypress.env('USER_PASSWORD'));
 });
 
 When('I login without password fields', () => {
-    loginPage.login(standardUser, '');
+    loginPage.login(Cypress.env('USER_STANDARD'), '');
 });
 
 Then('I should see {string}', (message) => {
