@@ -1,0 +1,77 @@
+name: Cypress Tests
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+on:
+  push:
+    branches: ['main', 'master']
+  pull_request:
+    branches: ['main', 'master']
+  workflow_dispatch:
+
+env:
+  BASE_URL: ${{ secrets.BASE_URL }}
+  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify Cypress
+        run: npx cypress verify
+
+      - name: Run Cypress tests
+        run: npm run cy:e2e
+        env:
+          CYPRESS_BASE_URL: ${{ secrets.BASE_URL }}
+        continue-on-error: true
+
+      - name: Generate Allure Report
+        if: always()
+        run: |
+          npm run allure:generate
+          cp -r ./allure-report/history/* ./allure-results/history/ || true
+
+      - name: Store Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.run_number }}
+          path: |
+            allure-results/
+            allure-report/
+            cypress/screenshots/
+            cypress/videos/
+          retention-days: 30
+
+      - name: Deploy to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-report
+          keep_files: true

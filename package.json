@@ -1,0 +1,46 @@
+{
+  "name": "cypress-automation-framework",
+  "version": "1.0.0",
+  "description": "E2E Testing Framework with Cypress, Cucumber and Allure Reports",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "cy:open": "cypress open",
+    "cy:clean": "node scripts/clean.js",
+    "cy:e2e": "npm run cy:clean && cypress run",
+    "report:generate": "allure generate allure-results --clean -o allure-report",
+    "report:open": "allure open allure-report",
+    "test:full": "npm run cy:e2e && npm run report:generate && npm run report:open",
+    "allure:generate": "allure generate allure-results --clean",
+    "allure:clear": "rimraf \"./allure-results\" \"./allure-report\"",
+    "allure:history": "node scripts/moveHistory.js",
+    "allure:test": "npm run allure:clear && npm run cy:e2e && npm run allure:history",
+    "allure:serve": "allure serve allure-results"
+  },
+  "keywords": [
+    "cypress",
+    "cucumber",
+    "testing",
+    "e2e",
+    "automation",
+    "allure"
+  ],
+  "author": "Thiago Fraga",
+  "license": "ISC",
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^21.0.2",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.3",
+    "@cypress/watch-preprocessor": "^1.0.1",
+    "@shelex/cypress-allure-plugin": "^2.40.2",
+    "allure-commandline": "^2.31.0",
+    "allure-cypress": "^3.0.5",
+    "cypress": "13.15.1",
+    "cypress-cucumber-preprocessor": "^4.3.1",
+    "esbuild": "^0.24.0",
+    "rimraf": "^5.0.5"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepsDefinitions": false,
+    "step_definitions": "cypress/e2e/step_definitions"
+  }
+}
