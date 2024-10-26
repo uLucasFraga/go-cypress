@@ -2,7 +2,6 @@
 
 import cartPage from "../pages/cartPage";
 
-// Background steps
 Given('I am logged in as a standard user', () => {
     cy.visit('/');
     cy.get('[data-test="username"]').type('standard_user');
@@ -10,7 +9,6 @@ Given('I am logged in as a standard user', () => {
     cy.get('[data-test="login-button"]').click();
 });
 
-// Cart steps
 When('I add a product to cart', () => {
     cartPage.addToCart('backpack');
 });

@@ -2,13 +2,11 @@
 
 import inventoryPage from "../pages/inventoryPage";
 
-// Login redirect validation
 Then('I should be redirected to the inventory page', () => {
     cy.url().should('include', '/inventory.html');
     cy.get('.title').should('contain', 'Products');
 });
 
-// Inventory steps
 Given('I am logged in as a standard user', () => {
     cy.visit('/');
     cy.get('[data-test="username"]').type('standard_user');

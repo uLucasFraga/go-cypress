@@ -3,7 +3,6 @@
 import checkoutPage from "../pages/checkoutPage";
 import inventoryPage from "../pages/inventoryPage";
 
-// Background steps
 Given('I am logged in as a standard user', () => {
     cy.visit('/');
     cy.get('[data-test="username"]').type('standard_user');
@@ -17,7 +16,6 @@ Given('I have items in my cart', () => {
     cy.get('[data-test="checkout"]').click();
 });
 
-// Main steps
 When('I fill checkout information', () => {
     checkoutPage.fillForm('John', 'Doe', '12345');
     checkoutPage.continue();
