@@ -1,18 +1,16 @@
 name: Cypress Tests
-
 permissions:
-  contents: write
-  pages: write
+  contents: write 
 
 on:
   push:
     branches:
-      - 'main'
+      - 'main'  
   pull_request:
     branches:
-      - 'main'
+      - 'main'  
   schedule:
-    - cron: "0 12,20 * * 1-5"
+    - cron: "0 12,20 * * 1-5"  
 
 jobs:
   regression-cypress:
@@ -22,31 +20,28 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
+        uses: actions/checkout@v4 
+      
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4  
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: '18' 
       
       - name: Clean directories
         run: |
-          npm run allure:clear
+          rm -rf allure-results
+          rm -rf allure-report
           npm run cy:clean
-
+      
       - name: Install dependencies
-        run: npm ci
-
-      - name: Verify Cypress
-        run: npx cypress verify
-
-      - name: Run Cypress tests
-        run: npm run cy:e2e
-        continue-on-error: true
-
+        run: npm ci 
+      
+      - name: Run Cypress Tests
+        uses: cypress-io/github-action@v5
+        with:
+          wait-on-timeout: 60
+          start: npm run cy:e2e 
+     
       - name: Load test report history
         uses: actions/checkout@v4
         if: always()
@@ -54,13 +49,7 @@ jobs:
         with:
           ref: gh-pages
           path: gh-pages
-
-      - name: Generate Allure Report
-        if: always()
-        run: |
-          npm run allure:generate
-          cp -r ./allure-report/history/* ./allure-results/history/ || true
-
+      
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
         if: always()
@@ -68,24 +57,11 @@ jobs:
           gh_pages: gh-pages
           allure_history: allure-history
           allure_results: allure-results
-
-      - name: Store Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-${{ github.run_number }}
-          path: |
-            allure-results/
-            allure-report/
-            cypress/screenshots/
-            cypress/videos/
-          retention-days: 30
-
+      
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-report
-          keep_files: true
+          publish_dir: allure-history
