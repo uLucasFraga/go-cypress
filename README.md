@@ -1,6 +1,6 @@
 # 🚀 Cypress E2E Testing Framework
 
-[![Cypress Tests](https://github.com/uLucasFraga/go-cypress/actions/workflows/cypress.yml/badge.svg)](https://github.com/uLucasFraga/go-cypress/actions/workflows/cypress.yml)
+[![Cypress Tests](https://github.com/uLucasFraga/go-cypress/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/uLucasFraga/go-cypress/actions/workflows/ci.yml)
 
 > Automation project using Cypress + Cucumber + Allure Reports to test e2e features.
 
@@ -21,6 +21,7 @@ cd go-cypress
 
 # Install dependencies
 npm install
+```
 
 ## 🔑 Setting Up Environment Variables:
 
