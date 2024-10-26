@@ -4,16 +4,18 @@
   "description": "E2E Testing Framework with Cypress, Cucumber and Allure Reports",
   "main": "index.js",
   "scripts": {
-    "headless": "cypress run --env allure=true",
-    "interface": "cypress open",
+    "test": "cypress run",
+    "cy:open": "cypress open",
+    "cy:clean": "node scripts/clean.js",
     "e2e": "npm run cy:clean && cypress run --env allure=true",
-    "report:allure": "allure generate allure-results --clean -o allure-report && allure open allure-report",
-    "test:allure": "npm run e2e && npm run report:allure",
+    "report:generate": "allure generate allure-results --clean -o allure-report",
+    "report:open": "allure open allure-report",
+    "test:full": "npm run e2e && npm run report:generate && npm run report:open",
     "allure:generate": "allure generate allure-results --clean",
-    "allure:history": "if exist allure-report/history move allure-report/history allure-results/history",
-    "allure:clear": "if exist allure-results rmdir /s /q allure-results && if exist allure-report rmdir /s /q allure-report",
+    "allure:clear": "rimraf \"./allure-results\" \"./allure-report\"",
+    "allure:history": "node scripts/moveHistory.js",
     "allure:test": "npm run allure:clear && npm run e2e && npm run allure:history",
-    "allure:open": "allure serve allure-results"
+    "allure:serve": "allure serve allure-results"
   },
   "keywords": [
     "cypress",
