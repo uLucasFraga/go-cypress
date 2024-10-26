@@ -17,11 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BASE_URL: ${{ secrets.BASE_URL }}
-      USER_STANDARD: ${{ secrets.USER_STANDARD }}
-      USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-      INVALID_USER: ${{ secrets.INVALID_USER }}
-      INVALID_PASSWORD: ${{ secrets.INVALID_PASSWORD }}
-      USER_LOCKED: ${{ secrets.USER_LOCKED }}
+      CYPRESS_USER_STANDARD: ${{ secrets.USER_STANDARD }}
+      CYPRESS_USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+      CYPRESS_INVALID_USER: ${{ secrets.INVALID_USER }}
+      CYPRESS_INVALID_PASSWORD: ${{ secrets.INVALID_PASSWORD }}
+      CYPRESS_USER_LOCKED: ${{ secrets.USER_LOCKED }}
     
     steps:
       - name: Checkout
@@ -55,12 +55,6 @@ jobs:
         with:
           wait-on-timeout: 60
           start: npm run cy:e2e
-        env:
-          USER_STANDARD: ${{ secrets.USER_STANDARD }}
-          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-          INVALID_USER: ${{ secrets.INVALID_USER }}
-          INVALID_PASSWORD: ${{ secrets.INVALID_PASSWORD }}
-          USER_LOCKED: ${{ secrets.USER_LOCKED }}
         continue-on-error: true
      
       - name: Load test report history
