@@ -1,50 +1,100 @@
-## Contexto
-Criar um conjunto de testes automatizados para o site Sauce Demo.
+# 🚀 Cypress E2E Testing Framework
 
-## Configuração da máquina
-  .  |  . | 
-:------: | :------: |
-Nome do Sistema Operacional | Microsoft Windows 10 Pro |
-Versão 10.0.19045 | Compilação 19045 |
-Fabricante do sistema | Dell Inc |
-Tipo do sistema | PC baseado em X64 |
-Processador | Intel(R) Core(TM) i5-10210U CPU @ 1.60GHz, 2112 Mhz) |
-Memória Física (RAM) Instalada | 16,0 GB |
-Browser | Chrome Versão 126.0.6478.127 (Versão oficial) 64 bits |
+[![Cypress Tests](https://github.com/uLucasFraga/go-cypress/actions/workflows/cypress.yml/badge.svg)](https://github.com/uLucasFraga/go-cypress/actions/workflows/cypress.yml)
 
-## Pré-requisitos
+> Automation project using Cypress + Cucumber + Allure Reports to test e2e features.
 
-Para clonar e executar este projeto, você precisará de:
+## 📋 Prerequisites
 
-- [git](https://git-scm.com/downloads) (usando versão `2.45.2.windows.1` )
-- [Node.js](https://nodejs.org/pt/download/package-manager) (usando versão `v20.11.0`)
-- npm (usando versão `10.8.2`)
-- Visual Studio Code (usando versão `1.91.1`)
+- [Node.js](https://nodejs.org/) (v18+)
+- NPM (comes with Node.js)
+- Chrome browser
 
-**Observação:** Ao instalar o Node.js, o npm é instalado automaticamente.
+## 🔧 Installation
 
-## Instalação
-### Baixar o projeto
-1. Crie uma pasta para clonar o projeto
-2. Clone este repositório: `git clone <URL_DO_REPOSITORIO>`
-3. Navegue até o diretório do projeto: `cd <PASTA_DO_PROJETO>`
+```bash
+# Clone the repository
+git clone https://github.com/uLucasFraga/go-cypress.git
 
-### Instalar dependências
-Para instalar as dependências de desenvolvimento, execute: `npm install`.
-<br>OBS.: Se houver algum problema em instalar as dependências, execute os três comandos na pasta do projeto, respectivamente: 
-1. `npm init` 
-2. `Npm install cypress -—save-dev`
-3. `npm install cypress-cucumber-preprocessor --save-dev`
+# Navigate to the project folder
+cd go-cypress
 
-### Executando os testes
-Para executar todos os testes em linha de comando, execute: `npm run headless`
-<br>Para executar todos os testes em interface cypress: `npm run intarface`
+# Install dependencies
+npm install
 
-### Relatório dinâmico dos testes
-Para verificar o relatório local, execute: `npm run allure:open` <br>
-Para verificar o relatório da última pipeline carregada, **[visite aqui](https://rafatrl.github.io/testeCypress/)**.
+## 🔑 Setting Up Environment Variables:
 
+To avoid exposing sensitive data like usernames and passwords, a cypress.env.json file is used and ignored by version control. You need to create this file in the project root with the following structure:
 
-## Resultado
-Resultado executado com headless: <br>
-![result](https://github.com/user-attachments/assets/9b7b59b4-ecf2-4f9e-bd77-6b591d610cc4)
+```json
+{
+    "USER_STANDARD": "standard_user",
+    "INVALID_USER": "invalid_user",
+    "USER_LOCKED": "locked_out_user",
+    "USER_PASSWORD": "secret_sauce",
+    "INVALID_PASSWORD": "invalid_sauce"
+}
+```
+
+Make sure to replace the values as needed for your testing environment.
+
+## 🎯 Running Tests
+
+# Open Cypress Test Runner
+npm run cy:open
+
+# Run tests in headless mode
+npm run cy:e2e
+
+# Generate and open Allure report
+npm run test:full
+
+## 📁 Project Structure
+
+cypress/
+├── e2e/               # Test files
+│   ├── features/      # Feature files in Gherkin
+│   └── step_definitions/  # Step definitions
+├── fixtures/          # Test data
+├── pages/            # Page objects
+└── support/          # Support files and commands
+
+## 📊 Test Reports
+
+- Reports are automatically generated after test execution
+- Allure reports are published to GitHub Pages
+- View the latest report on the GitHub Pages
+
+## ⚡ GitHub Actions
+
+Tests are automatically triggered on:
+
+- Push to main branch
+- Pull requests to main branch
+- Schedule: Twice daily (12:00 and 20:00) on weekdays
+
+## 📝 Features Covered
+ - Login
+ - Inventory
+ - Cart
+ - Checkout
+
+## 🤝 Contributing
+
+1. Fork the project
+2. Create your feature branch (git checkout -b feature/AmazingFeature)
+3. Commit your changes (git commit -m 'Add some AmazingFeature')
+4. Push to the branch (git push origin feature/AmazingFeature)
+5. Open a Pull Request
+
+## 📫 Support
+
+For support, email thifraga27@gmail.com or open an issue.
+
+## 📜 License
+
+This project is licensed under the ISC License - see the LICENSE file for details.
+
+--- 
+
+Made with ❤️ by Thiago Fraga
